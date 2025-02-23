@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Art Gallery</string>
+    <string name="shakuntala">Shakuntala</string>
+    <string name="raja_ravi_varma">Raja Ravi Varma</string>
+    <string name="bharat_mata">Bharat Mata</string>
+    <string name="abanindranath_tagore">Abanindranath Tagore</string>
+    <string name="magnolia_and_erect_rock">Magnolia and Erect Rock</string>
+    <string name="chen_hongshou">Chen Hongshou</string>
+    <string name="mona_lisa">Mona Lisa</string>
+    <string name="leonardo_da_vinci">Leonardo da Vinci</string>
+    <string name="night_hawks">Night Hawks</string>
+    <string name="edward_hopper">Edward Hopper</string>
+    <string name="starry_night">Starry Night</string>
+    <string name="vincent_van_gogh">Vincent van Gogh</string>
+    <string name="basket_of_fruit">Basket of Fruit</string>
+    <string name="caravaggio">Caravaggio</string>
+    <string name="the_japanese_footbridge_and_the_water_lily_pool">The Japanese Footbridge and the Water Lily Pool</string>
+    <string name="claude_monet">Claude Monet</string>
+    <string name="the_scream">The Scream</string>
+    <string name="edvard_munch">Edvard Munch</string>
+    <string name="frederic_edwin_church">Frederic Edwin Church</string>
+    <string name="the_england_scenery">The England Scenery</string>
+</resources>
