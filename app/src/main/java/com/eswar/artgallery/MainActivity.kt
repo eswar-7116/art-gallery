@@ -6,8 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.MarqueeAnimationMode
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +38,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.eswar.artgallery.ui.theme.ArtGalleryTheme
@@ -199,6 +204,7 @@ fun ArtImage(@DrawableRes drawableId: Int) {
   }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ArtDetails(title: String, artist: String, year: Int?) {
   Column(
@@ -210,7 +216,8 @@ fun ArtDetails(title: String, artist: String, year: Int?) {
     Text(
       text = title,
       fontSize = 28.sp,
-      fontWeight = FontWeight.Light
+      fontWeight = FontWeight.Light,
+      modifier = Modifier.basicMarquee(Int.MAX_VALUE)
     )
 
     val artistAndYear = buildAnnotatedString {
@@ -227,5 +234,37 @@ fun ArtDetails(title: String, artist: String, year: Int?) {
     Text(
       text = artistAndYear
     )
+  }
+}
+
+@Preview
+@Composable
+private fun AppPreview() {
+  ArtGalleryTheme {
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+      App(
+        modifier = Modifier.padding(innerPadding),
+        listOf(
+          Art(
+            artId = R.drawable.shakuntala_by_raja_ravi_varma,
+            title = "Shakuntala",
+            artist = "Raja Ravi Varma",
+            year = 1898
+          ),
+          Art(
+            artId = R.drawable.bharat_mata_by_abanindranath_tagore,
+            title = "Bharat Mata",
+            artist = "Abanindranath Tagore",
+            year = 1905
+          ),
+          Art(
+            artId = R.drawable.magnolia_and_erect_rock_chen_hongshou,
+            title = "Magnolia and Erect Rock",
+            artist = "Chen Hongshou",
+            year = null
+          )
+        )
+      )
+    }
   }
 }
