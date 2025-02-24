@@ -8,8 +8,6 @@ import androidx.annotation.DrawableRes
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.MarqueeAnimationMode
-import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,8 +19,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,13 +33,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -139,67 +138,77 @@ data class Art(
 fun App(modifier: Modifier = Modifier, arts: List<Art>) {
   var currentArt by remember { mutableIntStateOf(0) }
 
-  Column(
+  Surface(
     modifier = modifier.fillMaxSize(),
-    horizontalAlignment = Alignment.CenterHorizontally,
-    verticalArrangement = Arrangement.SpaceBetween
+    color = MaterialTheme.colorScheme.background
   ) {
-    Spacer(Modifier)
-    ArtImage(arts[currentArt].artId)
-
     Column(
-      modifier = Modifier.fillMaxWidth(),
-      horizontalAlignment = Alignment.CenterHorizontally
+      modifier = Modifier.fillMaxSize(),
+      horizontalAlignment = Alignment.CenterHorizontally,
+      verticalArrangement = Arrangement.SpaceBetween
     ) {
-      ArtDetails(arts[currentArt].title, arts[currentArt].artist, arts[currentArt].year)
-      Spacer(Modifier.height(32.dp))
+      Spacer(Modifier)
+      ArtImage(arts[currentArt].artId)
 
-      Row(
-        modifier = Modifier
-          .padding(start = 20.dp, end = 20.dp)
-          .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+      Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
       ) {
-        Button(
-          onClick = {
-            currentArt = (currentArt - 1 + arts.size) % arts.size
-          }
-        ) {
-          Text("Previous")
-        }
+        ArtDetails(arts[currentArt].title, arts[currentArt].artist, arts[currentArt].year)
+        Spacer(Modifier.height(32.dp))
 
-        Button(
-          onClick = {
-            currentArt = (currentArt + 1) % arts.size
-          }
+        Row(
+          modifier = Modifier
+            .padding(horizontal = 20.dp)
+            .fillMaxWidth(),
+          horizontalArrangement = Arrangement.SpaceBetween
         ) {
-          Text("Next")
+          Button(
+            onClick = {
+              currentArt = (currentArt - 1 + arts.size) % arts.size
+            }
+          ) {
+            Text("Previous")
+          }
+
+          Button(
+            onClick = {
+              currentArt = (currentArt + 1) % arts.size
+            }
+          ) {
+            Text("Next")
+          }
         }
+        Spacer(Modifier.height(32.dp))
       }
-      Spacer(Modifier.height(32.dp))
     }
   }
 }
 
 @Composable
 fun ArtImage(@DrawableRes drawableId: Int) {
-  Box(
+  Surface(
     modifier = Modifier
       .fillMaxWidth(.9f)
       .fillMaxHeight(.5f)
-      .shadow(8.dp)
-      .background(Color(0xFFFFFFFF)),
-    contentAlignment = Alignment.Center
+      .shadow(8.dp),
+    shape = RoundedCornerShape(8.dp),
+    color = MaterialTheme.colorScheme.surface,
   ) {
-    Crossfade(targetState = drawableId, label = "Art transition") { targetDrawableId ->
-      Image(
-        painter = painterResource(targetDrawableId),
-        contentDescription = null,
-        contentScale = ContentScale.Fit,
-        modifier = Modifier
-          .padding(16.dp)
-          .fillMaxSize(),
-      )
+    Box(
+      modifier = Modifier.fillMaxSize(),
+      contentAlignment = Alignment.Center
+    ) {
+      Crossfade(targetState = drawableId, label = "Art transition") { targetDrawableId ->
+        Image(
+          painter = painterResource(targetDrawableId),
+          contentDescription = null,
+          contentScale = ContentScale.Fit,
+          modifier = Modifier
+            .padding(16.dp)
+            .fillMaxSize(),
+        )
+      }
     }
   }
 }
@@ -207,33 +216,37 @@ fun ArtImage(@DrawableRes drawableId: Int) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ArtDetails(title: String, artist: String, year: Int?) {
-  Column(
+  Surface(
     modifier = Modifier
-      .background(Color.LightGray)
       .padding(16.dp)
-      .fillMaxWidth(.9f)
+      .fillMaxWidth(.9f),
+    color = MaterialTheme.colorScheme.secondaryContainer,
+    shape = RoundedCornerShape(8.dp)
   ) {
-    Text(
-      text = title,
-      fontSize = 28.sp,
-      fontWeight = FontWeight.Light,
-      modifier = Modifier.basicMarquee(Int.MAX_VALUE)
-    )
+    Column(
+      modifier = Modifier.padding(16.dp)
+    ) {
+      Text(
+        text = title,
+        fontSize = 28.sp,
+        fontWeight = FontWeight.Light,
+        color = MaterialTheme.colorScheme.onSecondaryContainer,
+        modifier = Modifier.basicMarquee(Int.MAX_VALUE)
+      )
 
-    val artistAndYear = buildAnnotatedString {
-      pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
-      append("$artist ")
-      pop()
-      if (year != null) {
-        pushStyle(SpanStyle(fontWeight = FontWeight.ExtraLight))
-        append("($year)")
+      val artistAndYear = buildAnnotatedString {
+        pushStyle(SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSecondaryContainer))
+        append("$artist ")
         pop()
+        if (year != null) {
+          pushStyle(SpanStyle(fontWeight = FontWeight.ExtraLight, color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)))
+          append("($year)")
+          pop()
+        }
       }
-    }
 
-    Text(
-      text = artistAndYear
-    )
+      Text(text = artistAndYear)
+    }
   }
 }
 
